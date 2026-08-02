@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 import { Sidebar } from "./components/Sidebar/Sidebar";
 import { Chat } from "./components/Chat/Chat";
 import { Assistant } from "./components/Assistant/Assistant";
@@ -43,7 +44,7 @@ function App() {
     setAssistant(newAssistant);
   }
 
-  function updateChats(messages = []) {
+  function handleChatMessagesUpdate(messages) {
     setChats((prevChats) =>
       prevChats.map((chat) =>
         chat.id === activeChatId ? { ...chat, messages } : chat
@@ -51,8 +52,21 @@ function App() {
     );
   }
 
-  function handleChatMessagesUpdate(messages) {
-    updateChats(messages);
+  function handleNewChatCreate() {
+    const id = uuidv4();
+
+    setActiveChatId(id);
+    setChats((prevChats) => [
+      ...prevChats,
+      { id, title: "New Chat", messages: [] },
+    ]);
+  }
+
+  function handleActiveChatIdChange(id) {
+    setActiveChatId(id);
+    setChats((prevChats) =>
+      prevChats.filter(({ messages }) => messages.length > 0)
+    );
   }
 
   return (
@@ -66,7 +80,9 @@ function App() {
         <Sidebar
           chats={chats}
           activeChatId={activeChatId}
-          onActiveChatIdChange={setActiveChatId}
+          activeChatMessages={activeChatMessages}
+          onActiveChatIdChange={handleActiveChatIdChange}
+          onNewChatCreate={handleNewChatCreate}
         />
 
         <main className={styles.Main}>
