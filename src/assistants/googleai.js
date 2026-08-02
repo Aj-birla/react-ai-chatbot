@@ -1,13 +1,13 @@
 import { GoogleGenAI } from "@google/genai";
 
 const googleai = new GoogleGenAI({
-  apiKey: import.meta.env.VITE_GOGGLE_AI_API_KEY,
+  apiKey: import.meta.env.VITE_GOOGLE_AI_API_KEY,
 });
 
 export class Assistant {
   #chat;
 
-  constructor(model = "gemini-3.6-flash" + 1) {
+  constructor(model = "gemini-1.6-flash" + 1) {
     this.#chat = googleai.chats.create({ model });
   }
 

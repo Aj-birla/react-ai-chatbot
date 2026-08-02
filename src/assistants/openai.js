@@ -6,28 +6,30 @@ const openai = new OpenAI({
 });
 
 export class Assistant {
+  #client;
   #model;
 
-  constructor(model = "gpt-4o-mini") {
+  constructor(model = "gpt-5.6-luna", client = openai) {
+    this.#client = client;
     this.#model = model;
   }
 
   async chat(content, history) {
     try {
-      const result = await openai.chat.completions.create({
+      const result = await this.#client.chat.completions.create({
         model: this.#model,
         messages: [...history, { content, role: "user" }],
       });
 
       return result.choices[0].message.content;
     } catch (error) {
-      throw error;
+      throw this.#parseError(error);
     }
   }
 
   async *chatStream(content, history) {
     try {
-      const result = await openai.chat.completions.create({
+      const result = await this.#client.chat.completions.create({
         model: this.#model,
         messages: [...history, { content, role: "user" }],
         stream: true,
@@ -37,7 +39,11 @@ export class Assistant {
         yield chunk.choices[0]?.delta?.content || "";
       }
     } catch (error) {
-      throw error;
+      throw this.#parseError(error);
     }
+  }
+
+  #parseError(error) {
+    return error;
   }
 }
