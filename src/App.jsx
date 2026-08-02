@@ -1,13 +1,15 @@
 import { useState } from "react";
 // import { Assistant } from "./assistants/googleai";
-import { Assistant } from "./assistants/openai";
+// import { Assistant } from "./assistants/openai";
 import { Loader } from "./components/Loader/Loader";
 import { Chat } from "./components/Chat/Chat";
 import { Controls } from "./components/Controls/Controls";
+import { Assistant } from "./components/Assistant/Assistant";
 import styles from "./App.module.css";
 
+let assistant;
+
 function App() {
-  const assistant = new Assistant();
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isStreaming, setIsStreaming] = useState(false);
@@ -60,6 +62,10 @@ function App() {
     }
   }
 
+  function handleAssistantChange(newAssistant) {
+    assistant = newAssistant;
+  }
+
   return (
     <div className={styles.App}>
       {isLoading && <Loader />}
@@ -74,6 +80,7 @@ function App() {
         isDisabled={isLoading || isStreaming}
         onSend={handleContentSend}
       />
+      <Assistant onAssistantChange={handleAssistantChange} />
     </div>
   );
 }
