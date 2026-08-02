@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styles from "./Controls.module.css";
 
-export function Controls({ onSend }) {
+export function Controls({ isDisabled, onSend }) {
   const [content, setContent] = useState("");
 
   function handleContentChange(event) {
@@ -31,6 +31,7 @@ export function Controls({ onSend }) {
           value={content}
           onChange={handleContentChange}
           onKeyDown={handleEnterPress}
+          disabled={isDisabled}
         />
       </div>
       <button className={styles.Button} onClick={handleContentSend}>
