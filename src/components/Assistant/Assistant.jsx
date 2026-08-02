@@ -15,7 +15,7 @@ const assistantMap = {
 };
 
 export function Assistant({ onAssistantChange }) {
-  const [value, setValue] = useState("googleai:gemini-1.6-flash");
+  const [value, setValue] = useState("googleai:gemini-2.0-flash");
 
   function handleValueChange(event) {
     setValue(event.target.value);
